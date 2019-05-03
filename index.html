@@ -1,0 +1,556 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>CrossWidget</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link href="crosswidget.css" rel="stylesheet">
+
+  <style>
+    .guide{
+      font-size: 0.9em;
+    }
+  .code{
+    font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;
+  }
+  .com{
+    font-size: 0.8em;
+  }
+  .bold{
+    font-weight: 800;
+  }
+  #scatterplot{
+    width: 100%;
+    height: 400px;
+    border: solid 1px darkgray;
+    background: whitesmoke;
+  }
+  .crosswidget {
+    box-sizing: border-box;
+    width: 250px;
+    margin-bottom: 20px;
+}
+
+.crosswidget-title {
+    padding: 5px;
+    width: 100%;
+    height: 30px;
+    border: solid 1px darkgrey;
+    font-weight: 500;
+    font-size: 0.8em;
+    background: whitesmoke;
+    color: black;
+    text-align: center;
+}
+
+.crosswidget-body {
+    width: 100%;
+    height: 120px;
+    border: solid 1px darkgray;
+}
+#selected-percentage{
+  font-size: 0.8em;
+}
+
+.point{
+  opacity: 0.1;
+}
+
+.point.selected{
+  opacity: 1;
+}
+
+#legend{
+  text-align: center;
+  font-size: 0.8em;
+  width: 100%;
+}
+  </style>
+</head>
+
+<body>
+
+  <main class="container">
+
+    <div class="row justify-content-around">
+      <div class="col-9">
+          <h1 class="mt-5">CrossWidget</h1>
+          <p class="lead">
+              A D3.js plugin to generate multiple scented widgets for cross filtering activities.
+          </p>
+          <p style="font-size: 0.9em">
+              Filtering is one of the basic interaction techniques in information visualization. 
+              To better support a filtering activity, the visualization should be enriched by selectors composed of different visual elements and data distribution (i.e., scented widgets),
+              in order to improve the navigation of information spaces and the comprehension of the filtering result.
+              Thus, we propose CrossWidget, an open source JavaScript <a href="https://d3js.org/" target="_blank">D3.js</a> plugin, aimed at supporting cross filtering activities.
+              To better perform multiple selections, to understand their result, and to better investigate the relationships among attributes of the dataset,
+               this plugin proposes a set of <b>multiple scented widgets</b> that can be easily customized and integrated into Web visualization systems.
+          </p>
+          <p>This is an open source plugin. The code can be downloaded <a href="crosswidget.zip" target="_blank">here</a></p>
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="row justify-content-around">
+      <div class="col-9" style="font-size: 0.9em">
+          <p>
+            CrossWidget is based on <a href="https://d3js.org/" target="_blank">D3.js</a> version 5, and <a href="https://github.com/crossfilter/crossfilter" target="_blank">Crossfilter</a>, a JavaScript library for exploring large multivariate datasets in the browser.
+            The plugin offers a set of visual scents and set of widgets that can be freely combined by the user to create a <b>multiple scented widget</b>, linked to a crossfilter dimension. 
+          </p>
+          <p>
+            This is an example of a possible configuration using the Iris dataset. On the right there is the PCA representation of the dataset.
+            On the left, five crosswidgets linked to a dimension of the dataset.
+          </p>
+          
+      </div> 
+      
+    </div>
+
+    <div class="row">
+        <div class="col-6">
+          <div class="row justify-content-around" id="widgets">
+
+              
+              <div class="crosswidget" id="sepal-length">
+                <div class="crosswidget-title">
+                  <span>sepal length</span>
+                  <span class="undo" style="cursor: pointer;">
+                    <i class="fa fa-undo"></i>
+                  </span>
+                </div>
+                <div class="crosswidget-body"></div>
+              </div>
+
+              <div class="crosswidget" id="sepal-width">
+                <div class="crosswidget-title">
+                  <span>sepal width</span>
+                  <span class="undo" style="cursor: pointer;">
+                    <i class="fa fa-undo"></i>
+                  </span>
+                </div>
+                <div class="crosswidget-body"></div>
+              </div>
+
+              <div class="crosswidget" id="petal-length">
+                <div class="crosswidget-title">
+                  <span>petal length</span>
+                  <span class="undo" style="cursor: pointer;">
+                    <i class="fa fa-undo"></i>
+                  </span>
+                </div>
+                <div class="crosswidget-body"></div>
+              </div>
+
+              <div class="crosswidget" id="petal-width">
+                <div class="crosswidget-title">
+                  <span>petal width</span>
+                  <span class="undo" style="cursor: pointer;">
+                    <i class="fa fa-undo"></i>
+                  </span>
+                </div>
+                <div class="crosswidget-body"></div>
+              </div>
+
+              <div class="crosswidget" id="species">
+                <div class="crosswidget-title">
+                  <span>species</span>
+                  <span class="undo" style="cursor: pointer;">
+                    <i class="fa fa-undo"></i>
+                  </span>
+                </div>
+                <div class="crosswidget-body"></div>
+              </div>
+
+
+
+
+          </div>
+        </div> 
+        <div class="col-6">
+          <div class="row">
+              <svg id="scatterplot"></svg>
+              <div id="legend">
+                <span> <i class="fas fa-square" style="color: #e41a1c"></i> Setosa</span>&nbsp;&nbsp;&nbsp;
+                <span> <i class="fas fa-square" style="color: #4daf4a"></i> Versicolour</span>&nbsp;&nbsp;&nbsp;
+                <span> <i class="fas fa-square" style="color: #377eb8"></i> Virginica</span>&nbsp;&nbsp;&nbsp;
+            </div>
+          </div>
+          <div class="row" style="margin-top: 20px;">
+              <div class="col-2">
+                  <div id="selected-number">0</div>
+                </div>
+                <div class="col-6">
+                  <div class="progress" style="height: 20px;">
+                    <div id="selected-progress" class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                </div>
+                <div class="col-2">
+                  <div id="selected-percentage">0%</div>
+                </div>
+                <div class="col-2">
+                  <button id="deselect-all" class="btn btn-sm btn-dark btn">
+                    <small>Deselect All</small>
+                  </button>
+                </div>
+          </div>
+        </div>   
+      </div>
+ 
+
+    <hr>
+
+<div class="row justify-content-around">
+  <div class="col-9 guide">
+<p>
+  CrossWidget is based on <a href="https://d3js.org/" target="_blank">D3.js</a> version 5, and <a href="https://github.com/crossfilter/crossfilter" target="_blank">Crossfilter</a>, a JavaScript library for exploring large multivariate datasets in the browser.
+  The plugin offers a set of visual scents and set of widgets that can be freely combined by the user to create a <b>multiple scented widget</b>, linked to a crossfilter dimension. 
+</p>
+
+<p>
+  A crosswidget is composed of several components, that can be widgets and/or visual scents, placed one on top of the other, vertically aligning their domains, in order to be comparable.
+</p>
+<p>
+  A crosswidget needs a <b>crossfilter object</b> and an <b>accessor function</b> for the dimension to link the crosswidget to a crossfilter dimension. 
+  In this example we use the Iris dataset; suppose <span class="code bold">iris</span> is the crossfilter object yet created.
+</p>
+<pre class="prettyprint code">
+var iris = crossfilter(...);  
+</pre>
+<p>
+  An unlimited number of components (visual scents and widgets) can be added to a crosswidget using the function <span class="code bold">addComponent</span>.
+  Components are displayed in the same order in which they are added to the crosswidget.
+  The following code shows how to create the live example of this page.
+</p>
+<pre class="prettyprint code">
+// species
+var cwSpecies = d3.crosswidget(iris, function(d){ return d["species"]})
+  .paddingOuter(10)
+  .addComponent(d3.crosswidgetComponent.frequencyPlot())
+  .addComponent(d3.crosswidgetComponent.fixedIntervalsSelector())
+ 
+// sepal-length
+var cwSepalLength = d3.crosswidget(iris, function(d){ return d["sepal-length"]})
+  .paddingOuter(10)
+  .addComponent(d3.crosswidgetComponent.boxplot())
+  .addComponent(d3.crosswidgetComponent.sliderSelector())
+    
+// sepal-width
+var cwSepalWidth = d3.crosswidget(iris, function(d){ return d["sepal-width"]})
+  .paddingOuter(10)
+  .addComponent(d3.crosswidgetComponent.frequencyPlot().bins(20))
+  .addComponent(d3.crosswidgetComponent.fixedIntervalsSelector().bins(8).feedback())
+     
+// petal-length
+var cwPetalLength = d3.crosswidget(iris, function(d){ return d["petal-length"]})
+  .paddingOuter(10)
+  .addComponent(d3.crosswidgetComponent.heatmap())
+  .addComponent(d3.crosswidgetComponent.sliderSelector())
+    
+// petal-width
+var cwPetalWidth = d3.crosswidget(iris, function(d){ return d["petal-width"]})
+  .paddingOuter(10)
+  .addComponent(d3.crosswidgetComponent.violinPlot())
+  .addComponent(d3.crosswidgetComponent.fixedIntervalsSelector().feedback())
+</pre>
+
+<p>
+  Once the crosswidget has been created, we need to draw it in a container.
+  It appends an svg to the container and creates all the components inside of the svg, fitting the dimension of the container. 
+</p>
+          
+<pre class="prettyprint code">
+d3.select("#species")
+    .call(cwSpecies);
+
+...
+</pre>
+
+<br>
+<hr>
+<br>
+
+
+<p>
+Optional properties for a crosswidjet object:
+</p>
+<pre class="prettyprint code">
+.paddingInner(10)
+
+.paddingTop(10)
+.paddingRight(10)
+.paddingBottom(10)
+.paddingLeft(10)
+.paddingOuter(10) // sets top, right, bottom, left
+
+.padding(10) //sets all    
+</pre>
+
+<hr>
+
+<h3>Components</h3>
+<p>
+  The plugin offers in <span class="code bold">d3.crosswidgetComponent</span> a set of visual scents and set of widgets that can be freely combined by the user to create a multiple scented widget, linked to an attribute of the dataset. 
+  Widgets and visual scents are placed one on top of the other, vertically aligning their domains, in order to be comparable.
+</p>
+
+<p>
+  <h5>Visual scents:</h5>
+  They are designed to show information of a single attribute concerning all the dataset items and/or only a selection of them, with a continuous or discrete representation. The user can set the visual scent to show information about both dataset and selection or just one of them. %, removing from the scent the visualizations of the undesired part.
+When the current selection changes, the parts of the visual scent encoding the selection are automatically updated in order to show the new selected items.
+Currently we have implemented the following components:
+  <ul>
+    <li>Boxplot</li>
+    <li>Frequency plot</li>
+    <li>Heatmap</li>
+    <li>Violin plot</li>
+  </ul>
+</p>
+
+<b>Boxplot</b>
+<pre class="prettyprint code">
+var c = d3.crosswidgetComponent.boxplot()
+</pre>
+
+<b>Frequency plot</b>
+<pre class="prettyprint code">
+var c = d3.crosswidgetComponent.frequencyPlot()
+  .bins(10) //optional - set the number of bins
+</pre> 
+
+<b>Heatmap</b>
+<pre class="prettyprint code">
+var c = d3.crosswidgetComponent.heatmap()
+  .bins(10) //optional - set the number of bins
+  .colorInterpolatorDataset(interp) //optional - set the color interpolator for the dataset visualization (for ex., d3.interpolateGreys)
+  .colorInterpolatorSelection(interp) //optional - set the color interpolator for the selection visualization (for ex., d3.interpolateBlues)
+</pre>
+
+<b>Violin plot</b>
+<pre class="prettyprint code">
+var c = d3.crosswidgetComponent.violinPlot()
+</pre>
+
+<p>
+  All the scents offer the following optional methods:
+</p>
+<pre class="prettyprint code">
+/*
+Hides the visualizations that concern the dataset properties.
+If fitSelection is True the domain of the selection is enlarged to fit the container width.
+*/
+c.hideDataset([fitSelection])
+/*
+Hides the visualizations that concern the current selection properties.
+*/
+c.hideSelection()
+/*
+Shows ticks on the bottom of the visual scent.
+If tickSize is defined (integer), set the font-size property of the tick. Default 6 px.
+*/
+c.showTicks([tickSize])
+</pre>
+
+<br>
+<br>
+
+<p>
+  <h5>Widgets:</h5>
+  These elements are designed to allow filtering activities on attributes of the dataset.
+  Since multiple widgets can be used for an attribute, and on each widget multiple selections are allowed, the query on the attribute is defined as the logical OR among all the selected intervals of the attribute. If no selection is done over an attribute, all the domain is considered selected. The resulting selection on the dataset is defined as the logical AND among all the attribute selections.
+  Currently we have implemented the following components:
+  <ul>
+    <li>Slider selector</li>
+    <li>Fixed intervals selector</li>
+  </ul>
+</p>
+
+<b>Slider selector</b>
+<pre class="prettyprint code">
+var c = sliderSelector()
+</pre>
+
+<b>Fixed intervals selector</b>
+<pre class="prettyprint code">
+var c = fixedIntervalsSelector()
+  .bins(10) // optional - sets the number of intervals
+  .feedback() // optional - enables the feedback on the current selection
+</pre>
+
+<br>
+<hr>
+<br>
+
+</div>
+</div>
+          
+  </main>
+
+</body>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script defer src="https://use.fontawesome.com/releases/v5.8.1/js/all.js" integrity="sha384-g5uSoOSBd7KkhAMlnQILrecXvzst9TdC09/VM+pjDTCM+1il8RHz5fKANTFFb+gQ" crossorigin="anonymous"></script>
+<script src="https://d3js.org/d3.v5.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js?lang=css"></script>
+
+<script src="crossfilter.v2.min.js"></script>
+<script src="crosswidget.js"></script>
+
+  
+<script>
+var iris = crossfilter([{"species": "Setosa", "sepal-length": 5.1, "sepal-width": 3.5, "petal-length": 1.4, "petal-width": 0.2, "x": -2.684125625969537, "y": 0.3193972465851002, "id": 1}, {"species": "Setosa", "sepal-length": 4.9, "sepal-width": 3.0, "petal-length": 1.4, "petal-width": 0.2, "x": -2.714141687294326, "y": -0.17700122506478105, "id": 2}, {"species": "Setosa", "sepal-length": 4.7, "sepal-width": 3.2, "petal-length": 1.3, "petal-width": 0.2, "x": -2.888990569059297, "y": -0.1449494260855585, "id": 3}, {"species": "Setosa", "sepal-length": 4.6, "sepal-width": 3.1, "petal-length": 1.5, "petal-width": 0.2, "x": -2.74534285564141, "y": -0.3182989792519172, "id": 4}, {"species": "Setosa", "sepal-length": 5.0, "sepal-width": 3.6, "petal-length": 1.4, "petal-width": 0.2, "x": -2.7287165365545305, "y": 0.3267545129349189, "id": 5}, {"species": "Setosa", "sepal-length": 5.4, "sepal-width": 3.9, "petal-length": 1.7, "petal-width": 0.4, "x": -2.2808596328444923, "y": 0.741330449062914, "id": 6}, {"species": "Setosa", "sepal-length": 4.6, "sepal-width": 3.4, "petal-length": 1.4, "petal-width": 0.3, "x": -2.820537750740609, "y": -0.08946138452857001, "id": 7}, {"species": "Setosa", "sepal-length": 5.0, "sepal-width": 3.4, "petal-length": 1.5, "petal-width": 0.2, "x": -2.626144973146633, "y": 0.16338495969832784, "id": 8}, {"species": "Setosa", "sepal-length": 4.4, "sepal-width": 2.9, "petal-length": 1.4, "petal-width": 0.2, "x": -2.8863827317805537, "y": -0.5783117541867048, "id": 9}, {"species": "Setosa", "sepal-length": 4.9, "sepal-width": 3.1, "petal-length": 1.5, "petal-width": 0.1, "x": -2.6727557978209546, "y": -0.1137742458741177, "id": 10}, {"species": "Setosa", "sepal-length": 5.4, "sepal-width": 3.7, "petal-length": 1.5, "petal-width": 0.2, "x": -2.5069470906518565, "y": 0.6450688986485731, "id": 11}, {"species": "Setosa", "sepal-length": 4.8, "sepal-width": 3.4, "petal-length": 1.6, "petal-width": 0.2, "x": -2.6127552309087236, "y": 0.014729939161373558, "id": 12}, {"species": "Setosa", "sepal-length": 4.8, "sepal-width": 3.0, "petal-length": 1.4, "petal-width": 0.1, "x": -2.7861092661880185, "y": -0.2351120002017193, "id": 13}, {"species": "Setosa", "sepal-length": 4.3, "sepal-width": 3.0, "petal-length": 1.1, "petal-width": 0.1, "x": -3.223803743865653, "y": -0.5113945870063832, "id": 14}, {"species": "Setosa", "sepal-length": 5.8, "sepal-width": 4.0, "petal-length": 1.2, "petal-width": 0.2, "x": -2.64475038994203, "y": 1.1787646364375743, "id": 15}, {"species": "Setosa", "sepal-length": 5.7, "sepal-width": 4.4, "petal-length": 1.5, "petal-width": 0.4, "x": -2.3860390335311337, "y": 1.3380623304006518, "id": 16}, {"species": "Setosa", "sepal-length": 5.4, "sepal-width": 3.9, "petal-length": 1.3, "petal-width": 0.4, "x": -2.623527875224427, "y": 0.8106795141812568, "id": 17}, {"species": "Setosa", "sepal-length": 5.1, "sepal-width": 3.5, "petal-length": 1.4, "petal-width": 0.3, "x": -2.648296706254382, "y": 0.31184914459335383, "id": 18}, {"species": "Setosa", "sepal-length": 5.7, "sepal-width": 3.8, "petal-length": 1.7, "petal-width": 0.3, "x": -2.19982032361758, "y": 0.8728390389622103, "id": 19}, {"species": "Setosa", "sepal-length": 5.1, "sepal-width": 3.8, "petal-length": 1.5, "petal-width": 0.3, "x": -2.587986399878769, "y": 0.5135603087492759, "id": 20}, {"species": "Setosa", "sepal-length": 5.4, "sepal-width": 3.4, "petal-length": 1.7, "petal-width": 0.2, "x": -2.3102562152425183, "y": 0.39134593565389353, "id": 21}, {"species": "Setosa", "sepal-length": 5.1, "sepal-width": 3.7, "petal-length": 1.5, "petal-width": 0.4, "x": -2.543705228757157, "y": 0.43299606327902723, "id": 22}, {"species": "Setosa", "sepal-length": 4.6, "sepal-width": 3.6, "petal-length": 1.0, "petal-width": 0.2, "x": -3.215939415648612, "y": 0.13346806953852455, "id": 23}, {"species": "Setosa", "sepal-length": 5.1, "sepal-width": 3.3, "petal-length": 1.7, "petal-width": 0.5, "x": -2.3027331822262074, "y": 0.09870885481409865, "id": 24}, {"species": "Setosa", "sepal-length": 4.8, "sepal-width": 3.4, "petal-length": 1.9, "petal-width": 0.2, "x": -2.355754049123773, "y": -0.037281859677383476, "id": 25}, {"species": "Setosa", "sepal-length": 5.0, "sepal-width": 3.0, "petal-length": 1.6, "petal-width": 0.2, "x": -2.5066689069258223, "y": -0.14601688049526845, "id": 26}, {"species": "Setosa", "sepal-length": 5.0, "sepal-width": 3.4, "petal-length": 1.6, "petal-width": 0.4, "x": -2.468820073121339, "y": 0.13095148943524945, "id": 27}, {"species": "Setosa", "sepal-length": 5.2, "sepal-width": 3.5, "petal-length": 1.5, "petal-width": 0.2, "x": -2.5623199061960165, "y": 0.3677188574341991, "id": 28}, {"species": "Setosa", "sepal-length": 5.2, "sepal-width": 3.4, "petal-length": 1.4, "petal-width": 0.2, "x": -2.639534715384543, "y": 0.31203998023528207, "id": 29}, {"species": "Setosa", "sepal-length": 4.7, "sepal-width": 3.2, "petal-length": 1.6, "petal-width": 0.2, "x": -2.6319893872743467, "y": -0.19696122492431561, "id": 30}, {"species": "Setosa", "sepal-length": 4.8, "sepal-width": 3.1, "petal-length": 1.6, "petal-width": 0.2, "x": -2.5873984766893527, "y": -0.20431849127413432, "id": 31}, {"species": "Setosa", "sepal-length": 5.4, "sepal-width": 3.4, "petal-length": 1.5, "petal-width": 0.4, "x": -2.4099324970021754, "y": 0.41092426422957223, "id": 32}, {"species": "Setosa", "sepal-length": 5.2, "sepal-width": 4.1, "petal-length": 1.5, "petal-width": 0.1, "x": -2.6488623343499125, "y": 0.813363820296961, "id": 33}, {"species": "Setosa", "sepal-length": 5.5, "sepal-width": 4.2, "petal-length": 1.4, "petal-width": 0.2, "x": -2.5987367491005875, "y": 1.0931457594493559, "id": 34}, {"species": "Setosa", "sepal-length": 4.9, "sepal-width": 3.1, "petal-length": 1.5, "petal-width": 0.2, "x": -2.6369268781057995, "y": -0.12132234786586404, "id": 35}, {"species": "Setosa", "sepal-length": 5.0, "sepal-width": 3.2, "petal-length": 1.2, "petal-width": 0.2, "x": -2.8662416521186698, "y": 0.06936447158007977, "id": 36}, {"species": "Setosa", "sepal-length": 5.5, "sepal-width": 3.5, "petal-length": 1.3, "petal-width": 0.2, "x": -2.625238049850373, "y": 0.5993700213794231, "id": 37}, {"species": "Setosa", "sepal-length": 4.9, "sepal-width": 3.6, "petal-length": 1.4, "petal-width": 0.1, "x": -2.8006841154482225, "y": 0.2686437377979813, "id": 38}, {"species": "Setosa", "sepal-length": 4.4, "sepal-width": 3.0, "petal-length": 1.3, "petal-width": 0.2, "x": -2.980502043781994, "y": -0.48795834442861646, "id": 39}, {"species": "Setosa", "sepal-length": 5.1, "sepal-width": 3.4, "petal-length": 1.5, "petal-width": 0.2, "x": -2.5900063139680967, "y": 0.2290438368270118, "id": 40}, {"species": "Setosa", "sepal-length": 5.0, "sepal-width": 3.5, "petal-length": 1.3, "petal-width": 0.3, "x": -2.7701024260279024, "y": 0.2635275337442556, "id": 41}, {"species": "Setosa", "sepal-length": 4.5, "sepal-width": 2.3, "petal-length": 1.3, "petal-width": 0.3, "x": -2.849368705043104, "y": -0.9409605736411975, "id": 42}, {"species": "Setosa", "sepal-length": 4.4, "sepal-width": 3.2, "petal-length": 1.3, "petal-width": 0.2, "x": -2.997406546594908, "y": -0.341926057471611, "id": 43}, {"species": "Setosa", "sepal-length": 5.0, "sepal-width": 3.5, "petal-length": 1.6, "petal-width": 0.6, "x": -2.405614485097486, "y": 0.18887142893025946, "id": 44}, {"species": "Setosa", "sepal-length": 5.1, "sepal-width": 3.8, "petal-length": 1.9, "petal-width": 0.4, "x": -2.20948923778368, "y": 0.43666314163918685, "id": 45}, {"species": "Setosa", "sepal-length": 4.8, "sepal-width": 3.0, "petal-length": 1.4, "petal-width": 0.3, "x": -2.7144514267577082, "y": -0.25020820418521195, "id": 46}, {"species": "Setosa", "sepal-length": 5.1, "sepal-width": 3.8, "petal-length": 1.6, "petal-width": 0.2, "x": -2.5381482589989406, "y": 0.5037711444614367, "id": 47}, {"species": "Setosa", "sepal-length": 4.6, "sepal-width": 3.2, "petal-length": 1.4, "petal-width": 0.2, "x": -2.839462167642851, "y": -0.22794556949382877, "id": 48}, {"species": "Setosa", "sepal-length": 5.3, "sepal-width": 3.7, "petal-length": 1.5, "petal-width": 0.2, "x": -2.5430857498303934, "y": 0.5794100215198885, "id": 49}, {"species": "Setosa", "sepal-length": 5.0, "sepal-width": 3.3, "petal-length": 1.4, "petal-width": 0.2, "x": -2.70335978233516, "y": 0.10770608249941083, "id": 50}, {"species": "Versicolour", "sepal-length": 7.0, "sepal-width": 3.2, "petal-length": 4.7, "petal-width": 1.4, "x": 1.2848256888583507, "y": 0.685160470467309, "id": 51}, {"species": "Versicolour", "sepal-length": 6.4, "sepal-width": 3.2, "petal-length": 4.5, "petal-width": 1.5, "x": 0.9324885323123178, "y": 0.31833363826262895, "id": 52}, {"species": "Versicolour", "sepal-length": 6.9, "sepal-width": 3.1, "petal-length": 4.9, "petal-width": 1.5, "x": 1.464302321991393, "y": 0.5042628153092045, "id": 53}, {"species": "Versicolour", "sepal-length": 5.5, "sepal-width": 2.3, "petal-length": 4.0, "petal-width": 1.3, "x": 0.1833177199583701, "y": -0.8279590118206323, "id": 54}, {"species": "Versicolour", "sepal-length": 6.5, "sepal-width": 2.8, "petal-length": 4.6, "petal-width": 1.5, "x": 1.0881032577116652, "y": 0.07459067519771648, "id": 55}, {"species": "Versicolour", "sepal-length": 5.7, "sepal-width": 2.8, "petal-length": 4.5, "petal-width": 1.3, "x": 0.641669084258077, "y": -0.4182468715686789, "id": 56}, {"species": "Versicolour", "sepal-length": 6.3, "sepal-width": 3.3, "petal-length": 4.7, "petal-width": 1.6, "x": 1.0950606626324462, "y": 0.283468270061529, "id": 57}, {"species": "Versicolour", "sepal-length": 4.9, "sepal-width": 2.4, "petal-length": 3.3, "petal-width": 1.0, "x": -0.7491226698296577, "y": -1.0048909611818957, "id": 58}, {"species": "Versicolour", "sepal-length": 6.6, "sepal-width": 2.9, "petal-length": 4.6, "petal-width": 1.3, "x": 1.0441318260534347, "y": 0.22836189978839583, "id": 59}, {"species": "Versicolour", "sepal-length": 5.2, "sepal-width": 2.7, "petal-length": 3.9, "petal-width": 1.4, "x": -0.008745404082896464, "y": -0.7230819050048346, "id": 60}, {"species": "Versicolour", "sepal-length": 5.0, "sepal-width": 2.0, "petal-length": 3.5, "petal-width": 1.0, "x": -0.5078408838353263, "y": -1.2659711905263937, "id": 61}, {"species": "Versicolour", "sepal-length": 5.9, "sepal-width": 3.0, "petal-length": 4.2, "petal-width": 1.5, "x": 0.5116985574475968, "y": -0.10398123549904056, "id": 62}, {"species": "Versicolour", "sepal-length": 6.0, "sepal-width": 2.2, "petal-length": 4.0, "petal-width": 1.0, "x": 0.264976508112046, "y": -0.5500364636804745, "id": 63}, {"species": "Versicolour", "sepal-length": 6.1, "sepal-width": 2.9, "petal-length": 4.7, "petal-width": 1.4, "x": 0.9849345104708895, "y": -0.12481785412635739, "id": 64}, {"species": "Versicolour", "sepal-length": 5.6, "sepal-width": 2.9, "petal-length": 3.6, "petal-width": 1.3, "x": -0.17392537168176833, "y": -0.25485420870258957, "id": 65}, {"species": "Versicolour", "sepal-length": 6.7, "sepal-width": 3.1, "petal-length": 4.4, "petal-width": 1.4, "x": 0.9278607809442467, "y": 0.46717949444151075, "id": 66}, {"species": "Versicolour", "sepal-length": 5.6, "sepal-width": 3.0, "petal-length": 4.5, "petal-width": 1.5, "x": 0.6602837616969364, "y": -0.35296966572385075, "id": 67}, {"species": "Versicolour", "sepal-length": 5.8, "sepal-width": 2.7, "petal-length": 4.1, "petal-width": 1.0, "x": 0.23610499331767104, "y": -0.3336107668249154, "id": 68}, {"species": "Versicolour", "sepal-length": 6.2, "sepal-width": 2.2, "petal-length": 4.5, "petal-width": 1.5, "x": 0.9447337280198126, "y": -0.5431455507797661, "id": 69}, {"species": "Versicolour", "sepal-length": 5.6, "sepal-width": 2.5, "petal-length": 3.9, "petal-width": 1.1, "x": 0.04522697629869935, "y": -0.5838343774718644, "id": 70}, {"species": "Versicolour", "sepal-length": 5.9, "sepal-width": 3.2, "petal-length": 4.8, "petal-width": 1.8, "x": 1.116283177350049, "y": -0.08461685219478823, "id": 71}, {"species": "Versicolour", "sepal-length": 6.1, "sepal-width": 2.8, "petal-length": 4.0, "petal-width": 1.3, "x": 0.35788841799730675, "y": -0.06892503165601391, "id": 72}, {"species": "Versicolour", "sepal-length": 6.3, "sepal-width": 2.5, "petal-length": 4.9, "petal-width": 1.5, "x": 1.298183875358913, "y": -0.3277873083339171, "id": 73}, {"species": "Versicolour", "sepal-length": 6.1, "sepal-width": 2.8, "petal-length": 4.7, "petal-width": 1.2, "x": 0.9217289224470363, "y": -0.1827377936213674, "id": 74}, {"species": "Versicolour", "sepal-length": 6.4, "sepal-width": 2.9, "petal-length": 4.3, "petal-width": 1.3, "x": 0.714853325911411, "y": 0.1490559443697849, "id": 75}, {"species": "Versicolour", "sepal-length": 6.6, "sepal-width": 3.0, "petal-length": 4.4, "petal-width": 1.4, "x": 0.9001743731721666, "y": 0.3285044738343235, "id": 76}, {"species": "Versicolour", "sepal-length": 6.8, "sepal-width": 2.8, "petal-length": 4.8, "petal-width": 1.4, "x": 1.3320244367220877, "y": 0.24444087601634393, "id": 77}, {"species": "Versicolour", "sepal-length": 6.7, "sepal-width": 3.0, "petal-length": 5.0, "petal-width": 1.7, "x": 1.5578021550660697, "y": 0.2674954473102549, "id": 78}, {"species": "Versicolour", "sepal-length": 6.0, "sepal-width": 2.9, "petal-length": 4.5, "petal-width": 1.5, "x": 0.8132906498175408, "y": -0.16335030068761633, "id": 79}, {"species": "Versicolour", "sepal-length": 5.7, "sepal-width": 2.6, "petal-length": 3.5, "petal-width": 1.0, "x": -0.30558377802430947, "y": -0.3682621897545881, "id": 80}, {"species": "Versicolour", "sepal-length": 5.5, "sepal-width": 2.4, "petal-length": 3.8, "petal-width": 1.1, "x": -0.06812649206836409, "y": -0.7051721317994654, "id": 81}, {"species": "Versicolour", "sepal-length": 5.5, "sepal-width": 2.4, "petal-length": 3.7, "petal-width": 1.0, "x": -0.18962247237850238, "y": -0.6802867635281336, "id": 82}, {"species": "Versicolour", "sepal-length": 5.8, "sepal-width": 2.7, "petal-length": 3.9, "petal-width": 1.2, "x": 0.1364287115580144, "y": -0.3140324382492368, "id": 83}, {"species": "Versicolour", "sepal-length": 6.0, "sepal-width": 2.7, "petal-length": 5.1, "petal-width": 1.6, "x": 1.3800264359155103, "y": -0.42095428731388185, "id": 84}, {"species": "Versicolour", "sepal-length": 5.4, "sepal-width": 3.0, "petal-length": 4.5, "petal-width": 1.5, "x": 0.588006443339863, "y": -0.4842874199812187, "id": 85}, {"species": "Versicolour", "sepal-length": 6.0, "sepal-width": 3.4, "petal-length": 4.5, "petal-width": 1.6, "x": 0.8068583125004116, "y": 0.1941823147131506, "id": 86}, {"species": "Versicolour", "sepal-length": 6.7, "sepal-width": 3.1, "petal-length": 4.7, "petal-width": 1.5, "x": 1.2206908824443523, "y": 0.4076195936110073, "id": 87}, {"species": "Versicolour", "sepal-length": 6.3, "sepal-width": 2.3, "petal-length": 4.4, "petal-width": 1.3, "x": 0.8150952357665993, "y": -0.37203705990950137, "id": 88}, {"species": "Versicolour", "sepal-length": 5.6, "sepal-width": 3.0, "petal-length": 4.1, "petal-width": 1.3, "x": 0.2459576798866919, "y": -0.2685243966220152, "id": 89}, {"species": "Versicolour", "sepal-length": 5.5, "sepal-width": 2.5, "petal-length": 4.0, "petal-width": 1.3, "x": 0.16641321714545632, "y": -0.6819267248636268, "id": 90}, {"species": "Versicolour", "sepal-length": 5.5, "sepal-width": 2.6, "petal-length": 4.4, "petal-width": 1.2, "x": 0.4648002884037787, "y": -0.6707115445117205, "id": 91}, {"species": "Versicolour", "sepal-length": 6.1, "sepal-width": 3.0, "petal-length": 4.6, "petal-width": 1.4, "x": 0.8908151984694487, "y": -0.0344644443682689, "id": 92}, {"species": "Versicolour", "sepal-length": 5.8, "sepal-width": 2.6, "petal-length": 4.0, "petal-width": 1.2, "x": 0.23054802355945486, "y": -0.40438584800732524, "id": 93}, {"species": "Versicolour", "sepal-length": 5.0, "sepal-width": 2.3, "petal-length": 3.3, "petal-width": 1.0, "x": -0.704531759244664, "y": -1.0122482275317144, "id": 94}, {"species": "Versicolour", "sepal-length": 5.6, "sepal-width": 2.7, "petal-length": 4.2, "petal-width": 1.3, "x": 0.35698149470104645, "y": -0.5049100933371089, "id": 95}, {"species": "Versicolour", "sepal-length": 5.7, "sepal-width": 3.0, "petal-length": 4.2, "petal-width": 1.2, "x": 0.3319344799450578, "y": -0.2126546837811701, "id": 96}, {"species": "Versicolour", "sepal-length": 5.7, "sepal-width": 2.9, "petal-length": 4.2, "petal-width": 1.3, "x": 0.3762156510666698, "y": -0.2932189292514191, "id": 97}, {"species": "Versicolour", "sepal-length": 6.2, "sepal-width": 2.9, "petal-length": 4.3, "petal-width": 1.3, "x": 0.6425760075543373, "y": 0.01773819011241633, "id": 98}, {"species": "Versicolour", "sepal-length": 5.1, "sepal-width": 2.5, "petal-length": 3.0, "petal-width": 1.1, "x": -0.9064698649488364, "y": -0.7560933665990144, "id": 99}, {"species": "Versicolour", "sepal-length": 5.7, "sepal-width": 2.8, "petal-length": 4.1, "petal-width": 1.3, "x": 0.29900084187814274, "y": -0.3488978064503361, "id": 100}, {"species": "Virginica", "sepal-length": 6.3, "sepal-width": 3.3, "petal-length": 6.0, "petal-width": 2.5, "x": 2.531192727803627, "y": -0.009849109498801986, "id": 101}, {"species": "Virginica", "sepal-length": 5.8, "sepal-width": 2.7, "petal-length": 5.1, "petal-width": 1.9, "x": 1.4152358767039017, "y": -0.5749163475464893, "id": 102}, {"species": "Virginica", "sepal-length": 7.1, "sepal-width": 3.0, "petal-length": 5.9, "petal-width": 2.1, "x": 2.6166760159956888, "y": 0.3439031513417348, "id": 103}, {"species": "Virginica", "sepal-length": 6.3, "sepal-width": 2.9, "petal-length": 5.6, "petal-width": 1.8, "x": 1.9715310530434347, "y": -0.1797279043522453, "id": 104}, {"species": "Virginica", "sepal-length": 6.5, "sepal-width": 3.0, "petal-length": 5.8, "petal-width": 2.2, "x": 2.350005920044639, "y": -0.0402609471425308, "id": 105}, {"species": "Virginica", "sepal-length": 7.6, "sepal-width": 3.0, "petal-length": 6.6, "petal-width": 2.1, "x": 3.397038736053257, "y": 0.5508366730280563, "id": 106}, {"species": "Virginica", "sepal-length": 4.9, "sepal-width": 2.5, "petal-length": 4.5, "petal-width": 1.7, "x": 0.5212322439097731, "y": -1.192758727000646, "id": 107}, {"species": "Virginica", "sepal-length": 7.3, "sepal-width": 2.9, "petal-length": 6.3, "petal-width": 1.8, "x": 2.932587068993688, "y": 0.35550000297749695, "id": 108}, {"species": "Virginica", "sepal-length": 6.7, "sepal-width": 2.5, "petal-length": 5.8, "petal-width": 1.8, "x": 2.321228816573377, "y": -0.24383150231069017, "id": 109}, {"species": "Virginica", "sepal-length": 7.2, "sepal-width": 3.6, "petal-length": 6.1, "petal-width": 2.5, "x": 2.9167509667860716, "y": 0.7827919488152788, "id": 110}, {"species": "Virginica", "sepal-length": 6.5, "sepal-width": 3.2, "petal-length": 5.1, "petal-width": 2.0, "x": 1.6617741536365305, "y": 0.24222840775506718, "id": 111}, {"species": "Virginica", "sepal-length": 6.4, "sepal-width": 2.7, "petal-length": 5.3, "petal-width": 1.9, "x": 1.8034019529650902, "y": -0.21563761733355516, "id": 112}, {"species": "Virginica", "sepal-length": 6.8, "sepal-width": 3.0, "petal-length": 5.5, "petal-width": 2.1, "x": 2.165591796080144, "y": 0.21627558507402506, "id": 113}, {"species": "Virginica", "sepal-length": 5.7, "sepal-width": 2.5, "petal-length": 5.0, "petal-width": 2.0, "x": 1.3461635794584506, "y": -0.7768183473443395, "id": 114}, {"species": "Virginica", "sepal-length": 5.8, "sepal-width": 2.8, "petal-length": 5.1, "petal-width": 2.4, "x": 1.5859282238732202, "y": -0.5396407140267188, "id": 115}, {"species": "Virginica", "sepal-length": 6.4, "sepal-width": 3.2, "petal-length": 5.3, "petal-width": 2.3, "x": 1.904456374793426, "y": 0.11925069209197275, "id": 116}, {"species": "Virginica", "sepal-length": 6.5, "sepal-width": 3.0, "petal-length": 5.5, "petal-width": 1.8, "x": 1.9496890593990683, "y": 0.04194325966321162, "id": 117}, {"species": "Virginica", "sepal-length": 7.7, "sepal-width": 3.8, "petal-length": 6.7, "petal-width": 2.2, "x": 3.487055364290278, "y": 1.1757393297134298, "id": 118}, {"species": "Virginica", "sepal-length": 7.7, "sepal-width": 2.6, "petal-length": 6.9, "petal-width": 2.3, "x": 3.795645422072883, "y": 0.2573229734204804, "id": 119}, {"species": "Virginica", "sepal-length": 6.0, "sepal-width": 2.2, "petal-length": 5.0, "petal-width": 1.5, "x": 1.3007917126376562, "y": -0.7611496364350632, "id": 120}, {"species": "Virginica", "sepal-length": 6.9, "sepal-width": 3.2, "petal-length": 5.7, "petal-width": 2.3, "x": 2.4278179130660447, "y": 0.378196012617051, "id": 121}, {"species": "Virginica", "sepal-length": 5.6, "sepal-width": 2.8, "petal-length": 4.9, "petal-width": 2.0, "x": 1.1990011054655598, "y": -0.6060915277579306, "id": 122}, {"species": "Virginica", "sepal-length": 7.7, "sepal-width": 2.8, "petal-length": 6.7, "petal-width": 2.0, "x": 3.4999200389245373, "y": 0.46067409891189603, "id": 123}, {"species": "Virginica", "sepal-length": 6.3, "sepal-width": 2.7, "petal-length": 4.9, "petal-width": 1.8, "x": 1.3887661316914646, "y": -0.20439932735215074, "id": 124}, {"species": "Virginica", "sepal-length": 6.7, "sepal-width": 3.3, "petal-length": 5.7, "petal-width": 2.1, "x": 2.275430503872204, "y": 0.33499060582167745, "id": 125}, {"species": "Virginica", "sepal-length": 7.2, "sepal-width": 3.2, "petal-length": 6.0, "petal-width": 1.8, "x": 2.61409047381083, "y": 0.5609013551230783, "id": 126}, {"species": "Virginica", "sepal-length": 6.2, "sepal-width": 2.8, "petal-length": 4.8, "petal-width": 1.8, "x": 1.258508160511487, "y": -0.17970479472274656, "id": 127}, {"species": "Virginica", "sepal-length": 6.1, "sepal-width": 3.0, "petal-length": 4.9, "petal-width": 1.8, "x": 1.2911320591150202, "y": -0.11666865117401147, "id": 128}, {"species": "Virginica", "sepal-length": 6.4, "sepal-width": 2.8, "petal-length": 5.6, "petal-width": 2.1, "x": 2.123608722773894, "y": -0.2097294766773025, "id": 129}, {"species": "Virginica", "sepal-length": 7.2, "sepal-width": 3.0, "petal-length": 5.8, "petal-width": 1.6, "x": 2.388003016003467, "y": 0.4646398047087369, "id": 130}, {"species": "Virginica", "sepal-length": 7.4, "sepal-width": 2.8, "petal-length": 6.1, "petal-width": 1.9, "x": 2.84167277810387, "y": 0.3752691671951039, "id": 131}, {"species": "Virginica", "sepal-length": 7.9, "sepal-width": 3.8, "petal-length": 6.4, "petal-width": 2.0, "x": 3.2306736614320917, "y": 1.3741650867930482, "id": 132}, {"species": "Virginica", "sepal-length": 6.4, "sepal-width": 2.8, "petal-length": 5.6, "petal-width": 2.2, "x": 2.159437642489049, "y": -0.21727757866904882, "id": 133}, {"species": "Virginica", "sepal-length": 6.3, "sepal-width": 2.8, "petal-length": 5.1, "petal-width": 1.5, "x": 1.444161242329509, "y": -0.14341341045758058, "id": 134}, {"species": "Virginica", "sepal-length": 6.1, "sepal-width": 2.6, "petal-length": 5.6, "petal-width": 1.4, "x": 1.7812948100451111, "y": -0.4999016810781363, "id": 135}, {"species": "Virginica", "sepal-length": 7.7, "sepal-width": 3.0, "petal-length": 6.1, "petal-width": 2.3, "x": 3.0764999316871866, "y": 0.6880856775711767, "id": 136}, {"species": "Virginica", "sepal-length": 6.3, "sepal-width": 3.4, "petal-length": 5.6, "petal-width": 2.4, "x": 2.1442433143020807, "y": 0.1400642010897899, "id": 137}, {"species": "Virginica", "sepal-length": 6.4, "sepal-width": 3.1, "petal-length": 5.5, "petal-width": 1.8, "x": 1.9050981488140748, "y": 0.049300526013030324, "id": 138}, {"species": "Virginica", "sepal-length": 6.0, "sepal-width": 3.0, "petal-length": 4.8, "petal-width": 1.8, "x": 1.1693263393414994, "y": -0.16499026202310968, "id": 139}, {"species": "Virginica", "sepal-length": 6.9, "sepal-width": 3.1, "petal-length": 5.4, "petal-width": 2.1, "x": 2.107611143257241, "y": 0.372287871960798, "id": 140}, {"species": "Virginica", "sepal-length": 6.7, "sepal-width": 3.1, "petal-length": 5.6, "petal-width": 2.4, "x": 2.314154705235599, "y": 0.1836512791690191, "id": 141}, {"species": "Virginica", "sepal-length": 6.9, "sepal-width": 3.1, "petal-length": 5.1, "petal-width": 2.3, "x": 1.9222678009026, "y": 0.4092034668160625, "id": 142}, {"species": "Virginica", "sepal-length": 5.8, "sepal-width": 2.7, "petal-length": 5.1, "petal-width": 1.9, "x": 1.4152358767039017, "y": -0.5749163475464893, "id": 143}, {"species": "Virginica", "sepal-length": 6.8, "sepal-width": 3.2, "petal-length": 5.9, "petal-width": 2.3, "x": 2.5630133750774746, "y": 0.277862602929195, "id": 144}, {"species": "Virginica", "sepal-length": 6.7, "sepal-width": 3.3, "petal-length": 5.7, "petal-width": 2.5, "x": 2.4187461827328245, "y": 0.3047981978546921, "id": 145}, {"species": "Virginica", "sepal-length": 6.7, "sepal-width": 3.0, "petal-length": 5.2, "petal-width": 2.3, "x": 1.9441097945469672, "y": 0.1875323028006054, "id": 146}, {"species": "Virginica", "sepal-length": 6.3, "sepal-width": 2.5, "petal-length": 5.0, "petal-width": 1.9, "x": 1.5271666148145164, "y": -0.3753169825804881, "id": 147}, {"species": "Virginica", "sepal-length": 6.5, "sepal-width": 3.0, "petal-length": 5.2, "petal-width": 2.0, "x": 1.7643457170444283, "y": 0.07885885451847598, "id": 148}, {"species": "Virginica", "sepal-length": 6.2, "sepal-width": 3.4, "petal-length": 5.4, "petal-width": 2.3, "x": 1.9009416142184226, "y": 0.11662795851202348, "id": 149}, {"species": "Virginica", "sepal-length": 5.9, "sepal-width": 3.0, "petal-length": 5.1, "petal-width": 1.8, "x": 1.390188861947913, "y": -0.2826609379905507, "id": 150}]);
+
+
+function createScatterplot(){
+  var margin = 10;
+  var w = Math.floor(d3.select("#scatterplot").node().getBoundingClientRect().width) - 2*margin;
+  var h = Math.floor(d3.select("#scatterplot").node().getBoundingClientRect().height)  - 2*margin;
+
+        var m = Math.floor(margin /2);
+        
+    var svg = d3.select("#scatterplot")
+      .append("g")
+      .attr("transform", "translate(" + margin+ "," + margin + ")");
+
+    var scaleX = d3.scaleLinear()
+      .domain(d3.extent(iris.all(), function (d) { return d.x }))
+      .range([0, w]);
+
+    var scaleY = d3.scaleLinear()
+      .domain(d3.extent(iris.all(), function (d) { return d.y }))
+      .range([h, 0]);
+
+
+  var scatterPoints = svg.selectAll(".point")
+    .data(iris.all())
+    .enter()
+    .append("circle")
+    .attr("class", function(d){ return "point selected"})
+    .attr("r", 3)
+    .attr("cx", function (d) { return scaleX(d.x)})
+    .attr("cy", function (d) { return scaleY(d.y)})
+    .attr("fill", function(d){
+      if(d.species == "Setosa") return "#e41a1c";
+      if(d.species == "Versicolour") return "#4daf4a";
+      if(d.species == "Virginica") return "#377eb8";
+    })
+
+  return scatterPoints;
+}
+
+// species
+var cwSpecies = d3.crosswidget(iris, function(d){ return d.species}).paddingOuter(10)
+  .addComponent(d3.crosswidgetComponent.frequencyPlot())
+  .addComponent(d3.crosswidgetComponent.fixedIntervalsSelector())
+
+d3.select("#species")
+  .select(".crosswidget-body")
+  .call(cwSpecies);
+
+d3.select("#species")
+  .select(".undo").on("click", function(){
+    cwSpecies.reset();
+  });
+
+
+// sepal-length
+var cwSepalLength = d3.crosswidget(iris, function(d){ return d["sepal-length"]}).paddingOuter(10)
+  .addComponent(d3.crosswidgetComponent.boxplot())
+  .addComponent(d3.crosswidgetComponent.sliderSelector())
+
+d3.select("#sepal-length")
+  .select(".crosswidget-body")
+  .call(cwSepalLength);
+
+d3.select("#sepal-length")
+  .select(".undo").on("click", function(){
+    cwSepalLength .reset();
+  });
+
+// sepal-width
+var cwSepalWidth = d3.crosswidget(iris, function(d){ return d["sepal-width"]}).paddingOuter(10)
+  .addComponent(d3.crosswidgetComponent.frequencyPlot().bins(20))
+  .addComponent(d3.crosswidgetComponent.fixedIntervalsSelector().bins(8).feedback())
+
+d3.select("#sepal-width")
+  .select(".crosswidget-body")
+  .call(cwSepalWidth);
+
+d3.select("#sepal-width")
+  .select(".undo").on("click", function(){
+    cwSepalWidth .reset();
+  });
+
+
+// petal-length
+var cwPetalLength = d3.crosswidget(iris, function(d){ return d["petal-length"]}).paddingOuter(10)
+  .addComponent(d3.crosswidgetComponent.heatmap())
+  .addComponent(d3.crosswidgetComponent.sliderSelector())
+
+d3.select("#petal-length")
+  .select(".crosswidget-body")
+  .call(cwPetalLength);
+
+d3.select("#petal-length")
+  .select(".undo").on("click", function(){
+    cwPetalLength .reset();
+  });
+
+// petal-width
+var cwPetalWidth = d3.crosswidget(iris, function(d){ return d["petal-width"]}).paddingOuter(10)
+  .addComponent(d3.crosswidgetComponent.violinPlot())
+  .addComponent(d3.crosswidgetComponent.fixedIntervalsSelector().feedback())
+
+d3.select("#petal-width")
+  .select(".crosswidget-body")
+  .call(cwPetalWidth);
+
+d3.select("#petal-width")
+  .select(".undo").on("click", function(){
+    cwPetalWidth .reset();
+  });
+
+
+var widgets = [cwSpecies, cwSepalLength, cwSepalWidth, cwPetalLength, cwPetalWidth];
+var datasetSize = iris.all().length;
+var progressbar = d3.select("#selected-progress").style("width","100%");
+var selectedNumber = d3.select("#selected-number").html(datasetSize + " <small>of " + datasetSize + "</small>");
+var selectedPercentage = d3.select("#selected-percentage").text("100%");
+
+d3.select("#deselect-all").on("click", function(){
+  widgets.forEach(function(w){
+    w.reset();
+  })
+});
+
+var points = createScatterplot();
+
+       
+iris.onChange(function(){
+  var n = iris.allFiltered().length;
+  var p = parseInt(n / datasetSize * 10000) / 100; 
+  progressbar.style("width", p + "%");
+  selectedNumber.html(n + " <small>of " + datasetSize + "</small>");
+  selectedPercentage.text(p + "%")
+
+  var selectedIds = iris.allFiltered().map(function(d){ return d.id});
+
+  points.each(function(d){
+    var p = d3.select(this);
+    if(selectedIds.includes(d.id)) p.classed("selected", true);
+    else p.classed("selected", false);
+  });
+
+});
+
+
+console.log(points._groups[0][0])
+
+
+</script>
+
+
+</html>

@@ -1,0 +1,144 @@
+.crosswidget{
+    shape-rendering: crispEdges; 
+}
+
+.crosswidget-component > .axis path,
+.crosswidget-component > .axis line {
+    fill: none;
+    stroke: black;
+    shape-rendering: crispEdges;
+}
+
+.crosswidget-component > .axis text {
+    fill: #3d3d3d;
+}
+/*
+*
+* slider selector
+*
+*/
+.crosswidget-component.slider-selector > .brush-area > .selection{
+    fill: transparent;
+    stroke: #c51b7d;;
+    stroke-width: 2px;
+}
+/*
+*
+* fixed intervals selector
+*
+*/
+.crosswidget-component.fixed-intervals-selector > .axis > .domain{
+    display: none;
+}
+
+.crosswidget-component.fixed-intervals-selector > .interval{
+    stroke: #3d3d3d;
+    fill: transparent;
+    stroke-width: 1px;
+    cursor: pointer;
+}
+
+.crosswidget-component.fixed-intervals-selector > .interval.selected{
+    stroke: #c51b7d;;
+    stroke-width: 3px
+}
+/*
+*
+* intervals feedback
+*
+*/
+.crosswidget-component > .interval.feedback-full{
+    fill:#007bff;
+}
+
+.crosswidget-component > .interval.feedback-partial{
+    fill: url(#stiped-pattern);
+}
+
+#stiped-pattern > rect{
+    fill: #007bff;
+}
+
+.crosswidget-component > .interval.feedback-empty{
+    fill:transparent;
+}
+/*
+*
+* boxplot
+*
+*/
+.crosswidget-component.boxplot > .dataset > .box{
+    fill: #969696;
+    stroke: black;
+    stroke-width: 1px;
+}
+
+.crosswidget-component.boxplot > .selection > .box{
+    fill: #007bff;
+    stroke: black;
+    stroke-width: 1px;
+}
+
+.crosswidget-component.boxplot > g > .median{
+    stroke: black;
+    stroke-width: 2px;
+}
+
+.crosswidget-component.boxplot > g > .wisker{
+    stroke: #3d3d3d;
+    stroke-width: 1px;
+}
+
+.crosswidget-component.boxplot > g > .hline{
+    stroke: #3d3d3d;
+    stroke-width: 1px;
+}
+.crosswidget-component.boxplot > g > .axis > .domain{
+    display: none;
+}
+/*
+*
+* violin plot
+*
+*/
+.crosswidget-component.violin-plot{
+    shape-rendering: geometricPrecision;
+}
+
+.crosswidget-component.violin-plot > .dataset{
+    fill: #969696;
+    stroke-linejoin: round;
+}
+
+.crosswidget-component.violin-plot > .selection{
+    fill: #007bff;
+    stroke-linejoin: round;
+}
+
+.crosswidget-component.violin-plot > .hline{
+    stroke: white;
+    stroke-width: 1px;
+}
+/*
+*
+* frequency plot
+*
+*/
+.crosswidget-component.frequency-plot{
+    shape-rendering: geometricPrecision;
+}
+
+.crosswidget-component.frequency-plot > .dataset{
+    fill: #969696;
+}
+
+.crosswidget-component.frequency-plot > .selection{
+    fill: #007bff;
+}
+/*
+*
+* heatmap
+*
+*/
+.crosswidget-component.heatmap{
+}
