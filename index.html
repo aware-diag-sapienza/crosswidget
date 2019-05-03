@@ -444,7 +444,7 @@ function createScatterplot(){
 // species
 var cwSpecies = d3.crosswidget(iris, function(d){ return d.species}).paddingOuter(10)
   .addComponent(d3.crosswidgetComponent.frequencyPlot())
-  .addComponent(d3.crosswidgetComponent.fixedIntervalsSelector())
+  .addComponent(d3.crosswidgetComponent.fixedIntervalsSelector().feedback())
 
 d3.select("#species")
   .select(".crosswidget-body")
