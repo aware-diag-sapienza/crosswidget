@@ -140,8 +140,8 @@
         return fn;
     };
     fn.paddingTop = function(value) {
-        if (!arguments.length) return paddingVal.left;
-        paddingVal.left = (typeof(value) === "function" ? value() : value);
+        if (!arguments.length) return paddingVal.top;
+        paddingVal.top = (typeof(value) === "function" ? value() : value);
         return fn;
     };
 
