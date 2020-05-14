@@ -28,7 +28,7 @@ var iris = crossfilter(...);
 An unlimited number of components (visual scents and widgets) can be added to a crosswidget using the function *addComponent*. Components are displayed in the same order in which they are added to the crosswidget. The following code shows how to create the live example of this page.
 
 
-```html
+```javascript
 // species
 var cwSpecies = d3.crosswidget(iris, function(d){ return d["species"]})
   .paddingOuter(10)
@@ -62,15 +62,14 @@ var cwPetalWidth = d3.crosswidget(iris, function(d){ return d["petal-width"]})
 
 Once the crosswidget has been created, we need to draw it in a container. It appends an svg to the container and creates all the components inside of the svg, fitting the dimension of the container.
 
-```html
+```javascript
 d3.select("#species")
     .call(cwSpecies);
-
 ```
 
 Optional properties for a crosswidjet object:
 
-```html
+```javascript
 .paddingInner(10)
 
 .paddingTop(10)
@@ -80,7 +79,6 @@ Optional properties for a crosswidjet object:
 .paddingOuter(10) // sets top, right, bottom, left
 
 .padding(10) //sets all    
-
 ```
 
 
@@ -99,33 +97,32 @@ Currently we have implemented the following components:
 - *Violin plot*
 
 #### Boxplot
-```html
+```javascript
 var c = d3.crosswidgetComponent.boxplot()
 ```
 
 #### Frequency Plot
-```html
+```javascript
 var c = d3.crosswidgetComponent.frequencyPlot()
   .bins(10) //optional - set the number of bins
 ```
 
 #### Heatmap
-```html
+```javascript
 var c = d3.crosswidgetComponent.heatmap()
   .bins(10) //optional - set the number of bins
   .colorInterpolatorDataset(interp) //optional - set the color interpolator for the dataset visualization (for ex., d3.interpolateGreys)
   .colorInterpolatorSelection(interp) //optional - set the color interpolator for the selection visualization (for ex., d3.interpolateBlues)
-
 ```
 
 #### Violin Plot
-```html
+```javascript
 var c = d3.crosswidgetComponent.violinPlot()
 ```
 
  All the scents offer the following optional methods:
 
-```html
+```javascript
 /*
 Hides the visualizations that concern the dataset properties.
 If fitSelection is True the domain of the selection is enlarged to fit the container width.
@@ -150,12 +147,12 @@ Currently we have implemented the following components:
 - *Fixed intervals selector*
 
 #### Slider selector
-```html
+```javascript
 var c = sliderSelector()
 ```
 
 #### Fixed intervals selector
-```html
+```javascript
 var c = fixedIntervalsSelector()
   .bins(10) // optional - sets the number of intervals
   .feedback() // optional - enables the feedback on the current selection
