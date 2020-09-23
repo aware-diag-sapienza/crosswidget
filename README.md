@@ -159,5 +159,7 @@ var c = fixedIntervalsSelector()
 ```
 
 ## Credits
+ Please, if you use this work in your research please cite: 
+ > Marco Angelini, Graziano Blasilli, Simone Lenti, Alessia Palleschi and Giuseppe Santucci. 2020. CrossWidgets Enanching Comples Data Selections through Modular Multi Attribute Selectors. In Proceedings of the 2020 International Conference on Advanced Visual Interfaces (AVI '20). DOI:https://doi.org/10.1145/3399715.3399918
+ 
 
-Cite us: https://diglib.eg.org/handle/10.2312/eurp20191131
