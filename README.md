@@ -15,10 +15,8 @@ A crosswidget needs a *crossfilter object* and an *accessor function* for the di
 
 ## Citation Policy
 If you use this work please cite: 
-> Marco Angelini, Graziano Blasilli, Simone Lenti, Alessia Palleschi and Giuseppe Santucci. 2020. 
-  CrossWidgets: Enhancing Complex Data Selections through Modular Multi Attribute Selectors. 
-  In Proceedings of the 2020 International Conference on Advanced Visual Interfaces (AVI '20). 
-  DOI:https://doi.org/10.1145/3399715.3399918
+>Marco Angelini, Graziano Blasilli, Simone Lenti, Alessia Palleschi, and Giuseppe Santucci. 2020. CrossWidgets: Enhancing Complex Data Selections through Modular Multi Attribute Selectors. In Proceedings of the International Conference on Advanced Visual Interfaces (AVI '20). Association for Computing Machinery, New York, NY, USA, Article 12, 1–9. 
+DOI: [10.1145/3399715.3399918](https://doi.org/10.1145/3399715.3399918)
 
 ## Installing
 In this example we use the Iris dataset; suppose *iris* is the crossfilter object yet created.
@@ -167,6 +165,6 @@ var c = fixedIntervalsSelector()
 
 ## Credits
  If you use this work in your research, please cite: 
- > Marco Angelini, Graziano Blasilli, Simone Lenti, Alessia Palleschi and Giuseppe Santucci. 2020. CrossWidgets: Enhancing Complex Data Selections through Modular Multi Attribute Selectors. In Proceedings of the 2020 International Conference on Advanced Visual Interfaces (AVI '20). 
+ >Marco Angelini, Graziano Blasilli, Simone Lenti, Alessia Palleschi, and Giuseppe Santucci. 2020. CrossWidgets: Enhancing Complex Data Selections through Modular Multi Attribute Selectors. In Proceedings of the International Conference on Advanced Visual Interfaces (AVI '20). Association for Computing Machinery, New York, NY, USA, Article 12, 1–9. 
  DOI: [10.1145/3399715.3399918](https://doi.org/10.1145/3399715.3399918)
 
