@@ -18,6 +18,25 @@ If you use this work please cite:
 >Marco Angelini, Graziano Blasilli, Simone Lenti, Alessia Palleschi, and Giuseppe Santucci. 2020. CrossWidgets: Enhancing Complex Data Selections through Modular Multi Attribute Selectors. In Proceedings of the International Conference on Advanced Visual Interfaces (AVI '20). Association for Computing Machinery, New York, NY, USA, Article 12, 1–9. 
 DOI: [10.1145/3399715.3399918](https://doi.org/10.1145/3399715.3399918)
 
+BibTex:
+```
+@inproceedings{10.1145/3399715.3399918, 
+author = {Angelini, Marco and Blasilli, Graziano and Lenti, Simone and Palleschi, Alessia and Santucci, Giuseppe}, 
+title = {CrossWidgets: Enhancing Complex Data Selections through Modular Multi Attribute Selectors},
+year = {2020}, 
+isbn = {9781450375351}, 
+publisher = {Association for Computing Machinery}, 
+address = {New York, NY, USA}, 
+url = {https://doi.org/10.1145/3399715.3399918}, 
+doi = {10.1145/3399715.3399918},
+booktitle = {Proceedings of the International Conference on Advanced Visual Interfaces},
+articleno = {12},
+numpages = {9},
+keywords = {visual filtering, user feedback, crossfilter, visual guidance},
+location = {Salerno, Italy},
+series = {AVI '20} }
+```
+
 ## Installing
 In this example we use the Iris dataset; suppose *iris* is the crossfilter object yet created.
 
@@ -168,3 +187,21 @@ var c = fixedIntervalsSelector()
  >Marco Angelini, Graziano Blasilli, Simone Lenti, Alessia Palleschi, and Giuseppe Santucci. 2020. CrossWidgets: Enhancing Complex Data Selections through Modular Multi Attribute Selectors. In Proceedings of the International Conference on Advanced Visual Interfaces (AVI '20). Association for Computing Machinery, New York, NY, USA, Article 12, 1–9. 
  DOI: [10.1145/3399715.3399918](https://doi.org/10.1145/3399715.3399918)
 
+BibTex:
+```
+@inproceedings{10.1145/3399715.3399918, 
+author = {Angelini, Marco and Blasilli, Graziano and Lenti, Simone and Palleschi, Alessia and Santucci, Giuseppe}, 
+title = {CrossWidgets: Enhancing Complex Data Selections through Modular Multi Attribute Selectors},
+year = {2020}, 
+isbn = {9781450375351}, 
+publisher = {Association for Computing Machinery}, 
+address = {New York, NY, USA}, 
+url = {https://doi.org/10.1145/3399715.3399918}, 
+doi = {10.1145/3399715.3399918},
+booktitle = {Proceedings of the International Conference on Advanced Visual Interfaces},
+articleno = {12},
+numpages = {9},
+keywords = {visual filtering, user feedback, crossfilter, visual guidance},
+location = {Salerno, Italy},
+series = {AVI '20} }
+```
