@@ -1,0 +1,29 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: "Angelini"
+    given-names: "Marco"
+    orcid: "https://orcid.org/0000-0001-9051-6972"
+  - family-names: "Blasilli"
+    given-names: "Graziano"
+    orcid: "https://orcid.org/0000-0003-3339-6403"
+  - family-names: "Lenti"
+    given-names: "Simone"
+    orcid: "https://orcid.org/0000-0001-8281-3723"
+  - family-names: "Palleschi"
+    given-names: "Alessia"
+    orcid: "https://orcid.org/0000-0002-1444-3959"
+  - family-names: "Santucci"
+    given-names: "Giuseppe"
+    orcid: "https://orcid.org/0000-0003-4350-1123"
+title: "CrossWidgets: Enhancing Complex Data Selections through Modular Multi Attribute Selectors"
+version: 1.0.0
+doi: 10.1145/3399715.3399918
+date-published: "2020-09-01"
+keywords:
+  - "Visual filtering"
+  - "crossfilter"
+  - "visual guidance"
+  - "user feedback"
+license: MIT License
+url: "https://github.com/aware-diag-sapienza/crosswidget"
